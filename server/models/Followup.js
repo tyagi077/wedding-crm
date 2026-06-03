@@ -16,6 +16,13 @@ const followupSchema = new mongoose.Schema({
     default: false,
   },
 
+  completedAt: Date,
+
+  reminderSent: {
+    type: Boolean,
+    default: false,
+  },
+
 }, {
   timestamps: true,
 })

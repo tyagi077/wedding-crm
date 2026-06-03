@@ -4,6 +4,20 @@ import { Link } from 'react-router-dom'
 
 import api from '../services/api'
 
+const getLeadId = (lead) => {
+
+  if (!lead) {
+    return null
+  }
+
+  if (typeof lead === 'string') {
+    return lead
+  }
+
+  return lead._id || null
+
+}
+
 const Notifications = () => {
 
   const [notifications, setNotifications] =
@@ -58,8 +72,14 @@ const Notifications = () => {
         {
           notifications.map((item) => (
 
+            (() => {
+
+              const leadId = getLeadId(item.leadId)
+
+              return (
+
             <Link
-              to={`/leads/${item.leadId?._id}`}
+              to={leadId ? `/followups/${leadId}` : '/followups'}
               key={item._id}
             >
 
@@ -94,6 +114,10 @@ const Notifications = () => {
               </div>
 
             </Link>
+
+              )
+
+            })()
 
           ))
         }

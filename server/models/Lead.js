@@ -8,16 +8,34 @@ const leadSchema = new mongoose.Schema({
 
   city: String,
 
+  email: {
+    type: String,
+    default: '',
+  },
+
+  eventType: {
+    type: String,
+    default: '',
+  },
+
+  budget: {
+    type: String,
+    default: '',
+  },
+
   status: {
     type: String,
     default: 'NEW',
   },
 
+  weddingDate: Date,
+
+  followUpDate: Date,
+
   notes: {
     type: String,
     default: '',
   },
-  weddingDate: Date,
 
 })
 

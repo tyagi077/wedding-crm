@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import api from '../services/api'
 
@@ -166,21 +167,33 @@ const Dashboard = () => {
 
           <div className='grid grid-cols-2 gap-4'>
 
-            <button className='bg-black text-white py-4 rounded-2xl'>
+            <Link
+              to='/leads?add=1'
+              className='block w-full bg-black text-white py-4 rounded-2xl text-center'
+            >
               Add Lead
-            </button>
+            </Link>
 
-            <button className='bg-orange-500 text-white py-4 rounded-2xl'>
+            <Link
+              to='/followups'
+              className='block w-full bg-orange-500 text-white py-4 rounded-2xl text-center'
+            >
               Followups
-            </button>
+            </Link>
 
-            <button className='bg-green-500 text-white py-4 rounded-2xl'>
+            <Link
+              to='/calendar'
+              className='block w-full bg-green-500 text-white py-4 rounded-2xl text-center'
+            >
               Bookings
-            </button>
+            </Link>
 
-            <button className='bg-blue-500 text-white py-4 rounded-2xl'>
+            <Link
+              to='/analytics'
+              className='block w-full bg-blue-500 text-white py-4 rounded-2xl text-center'
+            >
               Analytics
-            </button>
+            </Link>
 
           </div>
 

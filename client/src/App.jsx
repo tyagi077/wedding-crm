@@ -3,11 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Leads from './pages/Leads'
 import LeadDetails from './pages/LeadDetails'
+import LeadConversation from './pages/LeadConversation'
 import MainLayout from './components/layout/MainLayout'
 import Followups from './pages/Followups'
 import Pipeline from './pages/Pipeline'
 import CalendarPage from './pages/Calendar'
 import Notifications from './pages/Notifications'
+import Analytics from './pages/Analytics'
 function App() {
   return (
     <BrowserRouter>
@@ -46,6 +48,15 @@ function App() {
         />
 
         <Route
+          path='/followups/:leadId'
+          element={
+            <MainLayout>
+              <LeadConversation />
+            </MainLayout>
+          }
+        />
+
+        <Route
         path='/followups'
         element={
           <MainLayout>
@@ -61,6 +72,14 @@ function App() {
         </MainLayout>
       }
     />
+      <Route
+        path='/analytics'
+        element={
+          <MainLayout>
+            <Analytics />
+          </MainLayout>
+        }
+      />
     <Route
   path='/calendar'
   element={

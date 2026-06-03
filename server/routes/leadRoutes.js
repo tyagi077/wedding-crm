@@ -12,11 +12,11 @@ const {
 
 router.get('/', getLeads)
 
+router.get('/stats/dashboard', getDashboardStats)
+
 router.get('/:id', getSingleLead)
 
 router.post('/', createLead)
-
-router.get('/stats/dashboard', getDashboardStats)
 
 router.put('/:id', updateLead)
 

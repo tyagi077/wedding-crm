@@ -11,6 +11,15 @@ const statuses = [
   'LOST',
 ]
 
+const statusLabels = {
+  NEW: 'New',
+  CONTACTED: 'Contacted',
+  INTERESTED: 'Interested',
+  FOLLOW_UP: 'Follow Up',
+  BOOKED: 'Booked',
+  LOST: 'Lost',
+}
+
 const Pipeline = () => {
 
   const [leads, setLeads] = useState([])
@@ -55,9 +64,19 @@ const Pipeline = () => {
 
   }
 
+  const formatDate = (value) => {
+
+    if (!value) {
+      return 'No date set'
+    }
+
+    return new Date(value).toLocaleDateString()
+
+  }
+
   return (
 
-    <div className='p-6 overflow-x-auto'>
+    <div className='p-6 min-w-0 overflow-x-auto'>
 
       {/* HEADER */}
 
@@ -75,14 +94,14 @@ const Pipeline = () => {
 
       {/* BOARD */}
 
-      <div className='flex gap-6 min-w-max'>
+      <div className='flex gap-6 w-max min-w-full'>
 
         {
           statuses.map((status) => (
 
             <div
               key={status}
-              className='w-[320px] bg-gray-100 rounded-3xl p-4'
+              className='w-[320px] bg-gray-100 rounded-3xl p-4 shrink-0'
             >
 
               {/* COLUMN HEADER */}
@@ -90,7 +109,7 @@ const Pipeline = () => {
               <div className='flex items-center justify-between mb-5'>
 
                 <h2 className='text-xl font-bold'>
-                  {status}
+                  {statusLabels[status] || status}
                 </h2>
 
                 <span className='bg-black text-white text-sm px-3 py-1 rounded-full'>
@@ -133,6 +152,30 @@ const Pipeline = () => {
                           {lead.city}
                         </p>
 
+                        <div className='mt-3 space-y-1 text-sm text-gray-600'>
+
+                          {lead.email ? (
+                            <p>{lead.email}</p>
+                          ) : null}
+
+                          {lead.eventType ? (
+                            <p>{lead.eventType}</p>
+                          ) : null}
+
+                          {lead.budget ? (
+                            <p>Budget: {lead.budget}</p>
+                          ) : null}
+
+                          <p>
+                            Wedding: {formatDate(lead.weddingDate)}
+                          </p>
+
+                          <p>
+                            Follow-up: {formatDate(lead.followUpDate)}
+                          </p>
+
+                        </div>
+
                         {/* ACTIONS */}
 
                         <div className='mt-4 flex flex-wrap gap-2'>
@@ -140,7 +183,6 @@ const Pipeline = () => {
                           {
                             statuses
                               .filter((s) => s !== status)
-                              .slice(0, 2)
                               .map((nextStatus) => (
 
                                 <button
@@ -154,7 +196,7 @@ const Pipeline = () => {
                                   className='text-xs bg-black text-white px-3 py-2 rounded-xl'
                                 >
 
-                                  {nextStatus}
+                                  {statusLabels[nextStatus] || nextStatus}
 
                                 </button>
 

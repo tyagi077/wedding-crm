@@ -7,6 +7,12 @@ const AddLeadModal = ({ closeModal, refreshLeads }) => {
     name: '',
     phone: '',
     city: '',
+    email: '',
+    eventType: '',
+    budget: '',
+    weddingDate: '',
+    followUpDate: '',
+    notes: '',
     status: 'NEW',
   })
 
@@ -85,6 +91,56 @@ const AddLeadModal = ({ closeModal, refreshLeads }) => {
             type='text'
             name='city'
             placeholder='City'
+            className='w-full border p-4 rounded-2xl'
+            onChange={handleChange}
+          />
+
+          <input
+            type='email'
+            name='email'
+            placeholder='Email Address'
+            className='w-full border p-4 rounded-2xl'
+            onChange={handleChange}
+          />
+
+          <input
+            type='text'
+            name='eventType'
+            placeholder='Event Type (Wedding, Reception, Engagement, etc.)'
+            className='w-full border p-4 rounded-2xl'
+            onChange={handleChange}
+          />
+
+          <input
+            type='text'
+            name='budget'
+            placeholder='Budget'
+            className='w-full border p-4 rounded-2xl'
+            onChange={handleChange}
+          />
+
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+
+            <input
+              type='date'
+              name='weddingDate'
+              className='w-full border p-4 rounded-2xl'
+              onChange={handleChange}
+            />
+
+            <input
+              type='date'
+              name='followUpDate'
+              className='w-full border p-4 rounded-2xl'
+              onChange={handleChange}
+            />
+
+          </div>
+
+          <textarea
+            name='notes'
+            placeholder='Notes'
+            rows='4'
             className='w-full border p-4 rounded-2xl'
             onChange={handleChange}
           />

@@ -4,8 +4,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchLeads } from '../redux/slices/leadSlice'
 import { useState } from 'react'
 import AddLeadModal from '../components/leads/AddLeadModal'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import ImportLeads from '../components/leads/ImportLeads'
+
+const statusLabels = {
+  NEW: 'New',
+  CONTACTED: 'Contacted',
+  INTERESTED: 'Interested',
+  FOLLOW_UP: 'Follow Up',
+  BOOKED: 'Booked',
+  LOST: 'Lost',
+}
+
 const Leads = () => {
 
   const [showModal, setShowModal] = useState(false)
@@ -17,6 +27,8 @@ const [statusFilter, setStatusFilter] =
 
 const [cityFilter, setCityFilter] =
   useState('ALL')
+
+  const location = useLocation()
 
   const dispatch = useDispatch()
 
@@ -56,6 +68,14 @@ const [cityFilter, setCityFilter] =
   useEffect(() => {
     dispatch(fetchLeads())
   }, [dispatch])
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+
+    if (params.get('add') === '1') {
+      setShowModal(true)
+    }
+  }, [location.search])
 
   return (
     <div className='p-6'>
@@ -243,6 +263,14 @@ const [cityFilter, setCityFilter] =
               </th>
 
               <th className='text-left p-4'>
+                Email
+              </th>
+
+              <th className='text-left p-4'>
+                Details
+              </th>
+
+              <th className='text-left p-4'>
                 Status
               </th>
 
@@ -273,10 +301,28 @@ const [cityFilter, setCityFilter] =
           {lead.city}
         </td>
 
+        <td className='p-4 text-sm text-gray-600'>
+          {lead.email || 'Not added'}
+        </td>
+
+        <td className='p-4 text-sm text-gray-600'>
+          <div className='space-y-1'>
+
+            <p>
+              {lead.eventType || 'Not added'}
+            </p>
+
+            <p>
+              Budget: {lead.budget || 'Not added'}
+            </p>
+
+          </div>
+        </td>
+
         <td className='p-4'>
 
           <span className='bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm'>
-            {lead.status}
+            {statusLabels[lead.status] || lead.status}
           </span>
 
         </td>
