@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import socket from '../../services/socket'
+import api from '../../services/api'
 
 const NotificationBell = () => {
 
@@ -9,20 +9,25 @@ const NotificationBell = () => {
 
   useEffect(() => {
 
-    socket.on('newNotification', (data) => {
+    const fetchNotifications = async () => {
 
-      setNotifications((prev) => [
-        data,
-        ...prev,
-      ])
+      try {
 
-    })
+        const response = await api.get(
+          '/notifications'
+        )
 
-    return () => {
+        setNotifications(response.data)
 
-      socket.off('newNotification')
+      } catch (error) {
+
+        console.log(error)
+
+      }
 
     }
+
+    fetchNotifications()
 
   }, [])
 
