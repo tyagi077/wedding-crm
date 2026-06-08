@@ -20,6 +20,9 @@ const Leads = () => {
 
   const [showModal, setShowModal] = useState(false)
 
+  const [showImportModal, setShowImportModal] =
+    useState(false)
+
   const [search, setSearch] = useState('')
 
 const [statusFilter, setStatusFilter] =
@@ -94,17 +97,28 @@ const [cityFilter, setCityFilter] =
           </p>
         </div>
 
-        <button
-        onClick={() => setShowModal(true)}
-        className='bg-black text-white px-6 py-4 rounded-2xl font-medium hover:scale-105 transition'
-        >
-        Add Lead
-        </button>
-        <ImportLeads
-  refreshLeads={() =>
-    dispatch(fetchLeads())
-  }
-/>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-black text-white px-6 py-4 rounded-2xl font-medium hover:scale-105 transition"
+          >
+            Add Lead
+          </button>
+
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="bg-white border border-gray-200 px-4 py-3 rounded-2xl font-medium hover:scale-105 transition"
+          >
+            Import Leads
+          </button>
+        </div>
+
+        {showImportModal && (
+          <ImportLeads
+            closeModal={() => setShowImportModal(false)}
+            refreshLeads={() => dispatch(fetchLeads())}
+          />
+        )}
 
       </div>
       
