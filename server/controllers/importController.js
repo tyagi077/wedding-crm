@@ -223,10 +223,10 @@ exports.importLeads = async (req, res) => {
       }
 
       const weddingDateValue = getValue(row, 'weddingDate')
-      const followUpDateValue = getValue(row, 'followUpDate')
+      // const followUpDateValue = getValue(row, 'followUpDate')
 
       const weddingDate = parseDate(weddingDateValue)
-      const followUpDate = parseDate(followUpDateValue)
+      // const followUpDate = parseDate(followUpDateValue)
 
       if (weddingDateValue && !weddingDate) {
         errors.push(
@@ -242,19 +242,19 @@ exports.importLeads = async (req, res) => {
         return
       }
 
-      if (followUpDateValue && !followUpDate) {
-        errors.push(
-          buildRowError({
-            row: excelRow,
-            column: 'follow_up_date',
-            value: followUpDateValue,
-            message: 'Follow-up date is invalid',
-            expected: 'DD-MM-YYYY or YYYY-MM-DD, for example 20-06-2026',
-          })
-        )
+      // if (followUpDateValue && !followUpDate) {
+      //   errors.push(
+      //     buildRowError({
+      //       row: excelRow,
+      //       column: 'follow_up_date',
+      //       value: followUpDateValue,
+      //       message: 'Follow-up date is invalid',
+      //       expected: 'DD-MM-YYYY or YYYY-MM-DD, for example 20-06-2026',
+      //     })
+      //   )
 
-        return
-      }
+      //   return
+      // }
 
       leads.push({
         name: String(name).trim(),
