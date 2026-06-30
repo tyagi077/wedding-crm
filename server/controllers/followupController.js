@@ -26,7 +26,11 @@ exports.createFollowup = async (req, res) => {
 
 })
 
-    req.app.get('io').emit('newNotification',notification)
+    const io = req.app.get('io')
+
+    if (io && typeof io.emit === 'function') {
+      io.emit('newNotification', notification)
+    }
 
     res.json(followup)
 

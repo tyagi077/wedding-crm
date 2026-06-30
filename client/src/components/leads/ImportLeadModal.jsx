@@ -62,7 +62,7 @@ const ImportLeadModal = ({
       formData.append('file', file)
 
       const { data } = await api.post(
-        '/import/',
+        '/import/data',
         formData,
         {
           headers: {
@@ -77,17 +77,30 @@ const ImportLeadModal = ({
       if (data.success) {
         refreshLeads()
       }
-    } catch (error) {
-      setResult({
-        success: false,
-        message:
-          error.response?.data?.message ||
-          'Import failed',
-        missingColumns:
-          error.response?.data?.missingColumns ||
-          [],
-      })
-    } finally {
+    }catch (error) {
+  setResult({
+    success: false,
+    message:
+      error.response?.data?.message ||
+      'Import failed',
+
+    missingColumns:
+      error.response?.data?.missingColumns ||
+      [],
+
+    errors:
+      error.response?.data?.errors || [],
+
+    imported:
+      error.response?.data?.imported || 0,
+
+    failed:
+      error.response?.data?.failed || 0,
+
+    totalRows:
+      error.response?.data?.totalRows || 0,
+  })
+} finally {
       setLoading(false)
     }
   }
@@ -204,6 +217,132 @@ const ImportLeadModal = ({
                   )}
                 </div>
               )}
+              <pre className="bg-black text-white p-4 rounded">
+  {JSON.stringify(result, null, 2)}
+</pre>
+
+              {result?.errors?.length > 0 && (
+
+  <div className="mt-5 bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
+
+    <h3 className="font-semibold text-yellow-700">
+      Import Summary
+    </h3>
+
+    <div className="grid grid-cols-3 gap-4 mt-4">
+
+      <div className="bg-white rounded-xl p-3 text-center">
+        <p className="text-gray-500 text-sm">
+          Total
+        </p>
+
+        <p className="text-2xl font-bold">
+          {result.totalRows}
+        </p>
+      </div>
+
+      <div className="bg-green-50 rounded-xl p-3 text-center">
+        <p className="text-green-600 text-sm">
+          Imported
+        </p>
+
+        <p className="text-2xl font-bold text-green-600">
+          {result.imported}
+        </p>
+      </div>
+
+      <div className="bg-red-50 rounded-xl p-3 text-center">
+        <p className="text-red-600 text-sm">
+          Failed
+        </p>
+
+        <p className="text-2xl font-bold text-red-600">
+          {result.failed}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+)}
+
+              {result?.errors?.length > 0 && (
+  <div className="mt-6">
+
+    <h4 className="font-semibold text-red-600 mb-3">
+      Import Errors
+    </h4>
+
+    <div className="max-h-72 overflow-y-auto border rounded-2xl">
+
+      <table className="w-full text-sm">
+
+        <thead className="bg-gray-100 sticky top-0">
+
+          <tr>
+
+            <th className="text-left p-3">
+              Row
+            </th>
+
+            <th className="text-left p-3">
+              Column
+            </th>
+
+            <th className="text-left p-3">
+              Invalid Value
+            </th>
+
+            <th className="text-left p-3">
+              Reason
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          {result.errors.map((error, index) => (
+
+            <tr
+              key={index}
+              className="border-t"
+            >
+
+              <td className="p-3 font-medium">
+                {error.row}
+              </td>
+
+              <td className="p-3 text-red-600">
+                {error.column}
+              </td>
+
+              <td className="p-3">
+
+                {error.value || '-'}
+
+              </td>
+
+              <td className="p-3">
+
+                {error.message}
+
+              </td>
+
+            </tr>
+
+          ))}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+)}
             </>
           )}
 
@@ -260,31 +399,6 @@ const ImportLeadModal = ({
                 </div>
 
               </div>
-
-              {result.errors?.length > 0 && (
-                <div className="mt-6">
-
-                  <h4 className="font-semibold mb-3">
-                    Failed Rows
-                  </h4>
-
-                  <div className="max-h-48 overflow-y-auto border rounded-2xl">
-
-                    {result.errors.map(
-                      (error, index) => (
-                        <div
-                          key={index}
-                          className="p-3 border-b last:border-b-0 text-sm"
-                        >
-                          Row {error.row} —{' '}
-                          {error.error}
-                        </div>
-                      )
-                    )}
-
-                  </div>
-                </div>
-              )}
             </div>
           )}
 

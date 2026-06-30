@@ -57,6 +57,7 @@ const LeadDetails = () => {
   const [followupDate, setFollowupDate] = useState('')
   const [followupTime, setFollowupTime] = useState('17:00')
   const [followupNote, setFollowupNote] = useState('')
+  const [followupStatus, setFollowupStatus] = useState(null)
   const notesRef = useRef(null)
   const followupRef = useRef(null)
 
@@ -137,8 +138,14 @@ const LeadDetails = () => {
 
   try {
 
+    setFollowupStatus(null)
+
     if (!followupDate || !followupTime) {
-      alert('Please select a followup date and time.')
+      setFollowupStatus({
+        type: 'error',
+        message: 'Please select both a follow-up date and time.',
+      })
+
       return
     }
 
@@ -156,10 +163,13 @@ const LeadDetails = () => {
 
     })
 
-    alert('Followup Scheduled')
+    setFollowupStatus({
+      type: 'success',
+      message: 'Follow-up scheduled successfully.',
+    })
 
     setFollowupDate('')
-  setFollowupTime('17:00')
+    setFollowupTime('17:00')
     setFollowupNote('')
     fetchActivities()
     fetchLead()
@@ -167,6 +177,13 @@ const LeadDetails = () => {
   } catch (error) {
 
     console.log(error)
+
+    setFollowupStatus({
+      type: 'error',
+      message:
+        error.response?.data?.message ||
+        'Unable to schedule follow-up. Please try again.',
+    })
 
   }
 
@@ -566,18 +583,20 @@ const LeadDetails = () => {
           <input
             type='date'
             value={followupDate}
-            onChange={(e) =>
+            onChange={(e) => {
+              setFollowupStatus(null)
               setFollowupDate(e.target.value)
-            }
+            }}
             ref={followupRef}
             className='w-full border rounded-2xl p-4 mb-4'
           />
 
           <select
             value={followupTime}
-            onChange={(e) =>
+            onChange={(e) => {
+              setFollowupStatus(null)
               setFollowupTime(e.target.value)
-            }
+            }}
             className='w-full border rounded-2xl p-4 mb-4'
           >
 
@@ -601,11 +620,24 @@ const LeadDetails = () => {
           <textarea
             placeholder='Followup notes'
             value={followupNote}
-            onChange={(e) =>
+            onChange={(e) => {
+              setFollowupStatus(null)
               setFollowupNote(e.target.value)
-            }
+            }}
             className='w-full border rounded-2xl p-4 mb-4 h-28'
           />
+
+          {followupStatus && (
+            <div
+              className={`w-full mb-4 rounded-2xl px-4 py-3 text-sm font-medium border ${
+                followupStatus.type === 'success'
+                  ? 'bg-green-50 text-green-700 border-green-200'
+                  : 'bg-red-50 text-red-700 border-red-200'
+              }`}
+            >
+              {followupStatus.message}
+            </div>
+          )}
 
           <button
             onClick={saveFollowup}

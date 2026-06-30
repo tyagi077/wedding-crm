@@ -12,8 +12,7 @@ const AddLeadModal = ({ closeModal, refreshLeads }) => {
     eventType: '',
     budget: '',
     weddingDate: '',
-    followUpDate: '',
-    notes: '',
+        notes: '',
     status: 'NEW',
   })
 
@@ -160,18 +159,7 @@ const AddLeadModal = ({ closeModal, refreshLeads }) => {
                 onChange={handleChange}
               />
             </div>
-
-            <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">
-                Follow Up Date
-              </label>
-              <input
-                type="date"
-                name="followUpDate"
-                className="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black"
-                onChange={handleChange}
-              />
-            </div>
+          
           </div>
 
           <div className="mt-4">

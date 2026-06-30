@@ -65,7 +65,7 @@ const ImportLeads = ({
       formData.append('file', file)
 
       const { data } = await api.post(
-        '/import/',
+        '/import/data',
         formData,
         {
           headers: {
@@ -80,17 +80,31 @@ const ImportLeads = ({
       if (data.success) {
         refreshLeads?.()
       }
-    } catch (error) {
-      setResult({
-        success: false,
-        message:
-          error.response?.data?.message ||
-          'Import failed',
-        missingColumns:
-          error.response?.data
-            ?.missingColumns || [],
-      })
-    } finally {
+    }catch (error) {
+
+  const data = error.response?.data
+
+  setResult({
+    success: false,
+    message: data?.message || 'Import failed',
+
+    missingColumns:
+      data?.missingColumns || [],
+
+    errors:
+      data?.errors || [],
+
+    totalRows:
+      data?.totalRows || 0,
+
+    imported:
+      data?.imported || 0,
+
+    failed:
+      data?.failed || 0,
+  })
+
+} finally {
       setLoading(false)
     }
   }
@@ -186,33 +200,67 @@ const ImportLeads = ({
 
           {/* Error State */}
 
-          {result && !result.success && (
-            <div className="mt-4 bg-red-50 border border-red-200 rounded-2xl p-4">
+        {result && !result.success && (
+  <div className="mt-4 bg-red-50 border border-red-200 rounded-2xl p-4">
 
-              <p className="font-medium text-red-700">
-                {result.message}
-              </p>
+    <h3 className="font-semibold text-red-700">
+      {result.message}
+    </h3>
 
-              {result.missingColumns?.length >
-                0 && (
-                <div className="mt-3">
-                  <p className="text-sm font-medium text-red-600">
-                    Missing Columns:
-                  </p>
+    <div className="mt-4 overflow-x-auto">
 
-                  <ul className="mt-2 list-disc ml-5 text-sm text-red-600">
-                    {result.missingColumns.map(
-                      (column) => (
-                        <li key={column}>
-                          {column}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
+      <table className="w-full text-sm">
+
+        <thead className="bg-red-100">
+
+          <tr>
+            <th className="p-2 text-left">Row</th>
+            <th className="p-2 text-left">Field</th>
+            <th className="p-2 text-left">Value</th>
+            <th className="p-2 text-left">Expected</th>
+            <th className="p-2 text-left">Reason</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          {result.errors?.map((err, index) => (
+
+            <tr key={index} className="border-t">
+
+              <td className="p-2">
+                {err.row}
+              </td>
+
+              <td className="p-2">
+                {err.label}
+              </td>
+
+              <td className="p-2">
+                {err.value}
+              </td>
+
+              <td className="p-2">
+                {err.expected}
+              </td>
+
+              <td className="p-2 text-red-600">
+                {err.message}
+              </td>
+
+            </tr>
+
+          ))}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+)}
 
           {/* Success State */}
 

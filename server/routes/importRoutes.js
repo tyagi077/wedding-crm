@@ -29,10 +29,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
+router.get('/data', (req, res) => {
+  res.send('Import route is working')
+})
+
 router.post(
-  '/',
+  '/data',
   upload.single('file'),
   importLeads
 )
+
 
 module.exports = router
